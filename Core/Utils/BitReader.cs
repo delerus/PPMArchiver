@@ -10,34 +10,62 @@ namespace PPMdArchiver.Core.Utils
         private readonly Stream _stream;
         private byte _buffer = 0;
         private int _bitsInBuffer = 0;
+        private bool _disposed = false;
 
         public BitReader(Stream stream)
         {
+            if (stream == null || !stream.CanRead)
+                throw new ArgumentException("Stream must be readable.");
             _stream = stream;
         }
 
-        // TODO: Write logic to read single bit
         public byte ReadBit()
         {
-            // Not implemented yet.
+           if (_disposed)
+               throw new ObjectDisposedException(nameof(BitReader));
 
+            if (_bitsInBuffer == 0)
+            {
+                int nextByte = _stream.ReadByte();
+                if (nextByte == -1)
+                    throw new EndOfStreamException("Reached end of stream while reading bit.");
+                _buffer = (byte)nextByte;
+                _bitsInBuffer = 8;
+            }
+
+            _bitsInBuffer--;
             return (byte)((_buffer >> _bitsInBuffer) & 1);
         }
 
-        //Write logic to read multiple bits
         public uint ReadBits(int bitCount)
         {
-            // Not implemented yet.
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(BitReader));
 
-            return 1;
+            if (bitCount < 0 || bitCount > 32)
+                throw new ArgumentOutOfRangeException(nameof(bitCount), "bitCount must be between 0 and 32.");
+
+            if (bitCount == 0)
+                return 0;
+
+            uint result = 0;
+            for (int i = 0; i < bitCount; i++)
+            {
+                result = (result << 1) | ReadBit();
+            }
+
+            return result;
         }
 
         public bool IsEof => _stream.Position >= _stream.Length && _bitsInBuffer == 0;
 
-        // TODO: Write dispose mechanism for BitReader class
         public void Dispose()
         {
-            // Not implemented yet.
+            if (!_disposed)
+            {
+                _disposed = true;
+            }
+
         }
 
     }
