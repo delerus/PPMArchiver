@@ -8,7 +8,7 @@ namespace PPMdArchiver.Core.Encoding
 {
     internal interface IArithmeticEncoder
     {
-        void Initialize(Stream output);
+        void Initialize();
         void EncodeSymbol(uint low, uint high, uint total);
         void Flush();
     }
