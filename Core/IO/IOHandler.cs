@@ -3,7 +3,7 @@ using System.IO;
 
 namespace PPMdArchiver.Core.IO
 {
-    internal class IOHandler : IIOHandler
+    internal class IOHandler : IIOHandler, IDisposable
     {
         private FileStream _inputStream;
         private FileStream _outputStream;
@@ -52,18 +52,70 @@ namespace PPMdArchiver.Core.IO
 
         public bool ReadBlock(byte[] buffer, out int bytesRead)
         {
-            throw new NotImplementedException();
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(IOHandler));
+
+            if (_inputStream == null)
+                throw new InvalidOperationException("Input stream is not open.");
+
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+
+            try
+            {
+                bytesRead = _inputStream.Read(buffer, 0, buffer.Length);
+                return bytesRead > 0;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Failed to read from input stream.", ex);
+            }
         }
 
         public bool WriteBlock(byte[] buffer, int length)
         {
-            throw new NotImplementedException();
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(IOHandler));
+
+            if (_outputStream == null)
+                throw new InvalidOperationException("Output stream is not open.");
+
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+
+            if (length < 0 || length > buffer.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            try
+            {
+                _outputStream.Write(buffer, 0, length);
+                return true;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Failed to write to output stream.", ex);
+            }
         }
         public void Close()
         {
-            throw new NotImplementedException();
+            if (_disposed)
+                return;
+
+            _inputStream?.Dispose();
+            _outputStream?.Dispose();
+            _inputStream = null;
+            _outputStream = null;
         }
 
         public bool IsEof => _inputStream == null || _inputStream.Position >= _inputStream.Length;
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                Close();
+                _disposed = true;
+            }
+        }
     }
 }
