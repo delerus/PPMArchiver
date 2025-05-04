@@ -65,7 +65,6 @@ namespace PPMdArchiver.Core.Utils
             {
                 _disposed = true;
             }
-
         }
 
     }
