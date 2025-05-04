@@ -19,9 +19,11 @@ namespace PPMdArchiver.Core.Encoding
             _bitWriter = bitWriter;
         }
 
-        public void Initialize(Stream output)
+        public void Initialize()
         {
-
+            _low = 0;
+            _high = 0xFFFFFFFF;
+            _scale = 0;
         }
 
         public void EncodeSymbol(uint low, uint high, uint total)
