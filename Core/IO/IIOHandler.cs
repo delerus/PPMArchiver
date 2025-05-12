@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PPMdArchiver.Core.IO
+﻿namespace PPMdArchiver.Core.IO
 {
     /// <summary>
     /// General IO interface for working with files and streams

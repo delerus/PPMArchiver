@@ -12,6 +12,7 @@ namespace PPMdArchiver.Core.IO
         public IOHandler()
         {
             _inputStream = null;
+            _outputStream = null;
         }
 
         public void OpenInFile(string inputFile)
