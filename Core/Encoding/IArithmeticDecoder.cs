@@ -9,6 +9,7 @@ namespace PPMdArchiver.Core.Encoding
     internal interface IArithmeticDecoder
     {
         void Initialize();
-        uint DecodeSymbol(uint total, out uint symbolLow, out uint symbolHigh);
+        uint GetScaledValue(uint total); 
+        void UpdateRange(uint symbolLow, uint symbolHigh, uint total); 
     }
 }

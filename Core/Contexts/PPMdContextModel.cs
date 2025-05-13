@@ -45,7 +45,6 @@ namespace PPMdArchiver.Core.Contexts
                 currentCumulativeFrequency += entry.Value;
             }
 
-            // Escape — виртуальный символ
             probabilities.Add(new SymbolProbability(EscapeSymbol, 1, currentCumulativeFrequency));
             currentCumulativeFrequency += 1;
 
