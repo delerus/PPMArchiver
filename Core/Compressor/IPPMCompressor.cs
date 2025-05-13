@@ -9,11 +9,8 @@ namespace PPMdArchiver.Core.Compressor
     internal interface IPPMCompressor
     {
         void Initialize(int order, int memoryMb);
-        // TODO: write parameters for Compress function
-        bool Compress();
-        // TODO: write parameters for Decompress function
-        bool Decompress();
+        bool Compress(string inputFile, string outputFile);
+        bool Decompress(string inputFile, string outputFile);
         void Reset();
-
     }
 }

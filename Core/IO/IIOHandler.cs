@@ -3,7 +3,7 @@
     /// <summary>
     /// General IO interface for working with files and streams
     /// </summary>
-    internal interface IIOHandler
+    public interface IIOHandler
     {
         void OpenInFile(string inputFile);
         void OpenOutFile(string outputFile);
